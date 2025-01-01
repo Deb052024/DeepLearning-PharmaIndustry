@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sales Prediction</title>
+</head>
+<body>
+<h1>Sales Prediction</h1>
+
+<form id="predictionForm">
+  <label for="store_id">Store ID:</label><br>
+  <input type="number" id="store_id" name="store_id" required><br><br>
+  
+  <label for="date">Date (YYYY-MM-DD):</label><br>
+  <input type="date" id="date" name="date" required><br><br>
+  
+  <label for="promo">Promo (0 or 1):</label><br>
+  <input type="number" id="promo" name="promo" min="0" max="1" required><br><br>
+  
+  <button type="submit">Predict Sales</button>
+</form>
+<div id="result"></div>
+
+
+<script>
+  const form = document.getElementById('predictionForm');
+  const resultDiv = document.getElementById('result');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    
+    const store_id = document.getElementById('store_id').value;
+    const date = document.getElementById('date').value;
+    const promo = document.getElementById('promo').value;
+
+    const response = await fetch('/predict', { // Replace /predict with the actual route
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ store_id: store_id, date: date, promo: promo})
+    });
+    const data = await response.json();
+    resultDiv.innerHTML = `Predicted Sales: ${data.prediction}`;
+  });
+
+</script>
+
+</body>
+</html>
